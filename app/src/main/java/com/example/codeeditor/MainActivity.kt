@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
@@ -121,7 +122,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         topBar = {
                             TopAppBar(
-                                title = { Text(text = "Code Editor $currentFileName") },
+                                title = { Text(text = "KotEdit") },
                                 navigationIcon = {
                                     IconButton(onClick = {
                                         scope.launch { drawerState.open() }
@@ -132,20 +133,54 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
                                 },
-                                actions = {
-                                    IconButton(onClick = { showMiniToolbar = !showMiniToolbar }) {
-                                        Icon(
-                                            imageVector = Icons.Default.Edit,
-                                            contentDescription = "Editing Option"
-                                        )
-                                    }
-                                }
+
                             )
                         },
 
                         bottomBar = {
                             BottomAppBar(
                                 actions = {
+                                    IconButton(
+                                        onClick = {
+                                            cutText(
+                                                editorState.textField.value,
+                                                { editorState.onTextChange(it) },
+                                                clipboardManager
+                                            )
+                                        }
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.cut), // replace with your cut icon
+                                            contentDescription = "Cut"
+                                        )
+                                    }
+                                    IconButton(
+                                        onClick = {
+                                            copyText(
+                                                editorState.textField.value,
+                                                clipboardManager
+                                            )
+                                        }
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.copy), // replace with your copy icon
+                                            contentDescription = "Copy"
+                                        )
+                                    }
+                                    IconButton(
+                                        onClick = {
+                                            pasteText(
+                                                editorState.textField.value,
+                                                { editorState.onTextChange(it) },
+                                                clipboardManager
+                                            )
+                                        }
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.paste), // replace with your paste icon
+                                            contentDescription = "Paste"
+                                        )
+                                    }
                                     IconButton(onClick = { editorState.undo() }) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.undo),
@@ -171,7 +206,7 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }) {
                                         Icon(
-                                            imageVector = Icons.Default.AccountBox,
+                                            imageVector = Icons.Default.PlayArrow,
                                             contentDescription = "Find"
                                         )
                                     }
